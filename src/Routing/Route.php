@@ -1,4 +1,4 @@
-<?php namespace Champion;
+<?php namespace Champion\Routing;
 
 class Route
 {
@@ -28,5 +28,37 @@ class Route
         $this->path = $path;
         $this->controller = $controller;
         $this->controllerMethod = $controllerMethod;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHttpMethod()
+    {
+        return $this->httpMethod;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @return string
+     */
+    public function getController()
+    {
+        return $this->controller;
+    }
+
+    /**
+     * @return string
+     */
+    public function getControllerMethod()
+    {
+        return $this->controllerMethod;
     }
 }

@@ -1,9 +1,9 @@
-<?php
+<?php namespace Champion;
 
-
-namespace Champion;
-
-
-class HttpRequest {
-
+class HttpRequest
+{
+    public function getMethod()
+    {
+        return $_SERVER['REQUEST_METHOD'];
+    }
 }
