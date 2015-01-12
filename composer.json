@@ -1,0 +1,25 @@
+{
+  "name": "roarbb/champion",
+  "type": "library",
+  "description": "PHP Framework Experiment",
+  "keywords": ["framework"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Matej Sajgal",
+      "email": "matej@sajgal.com",
+      "homepage": "http://www.sajgal.com"
+    }
+  ],
+  "require": {
+    "phpmd/phpmd" : "@stable",
+    "squizlabs/php_codesniffer": "2.*",
+    "tracy/tracy": "~2.2",
+    "nette/neon": "2.3.*@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "Champion\\": "src"
+    }
+  }
+}

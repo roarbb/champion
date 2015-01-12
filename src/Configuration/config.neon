@@ -1,0 +1,7 @@
+github:
+    secret: djfaosdfio
+
+database:
+    host: localhost
+    user: root
+    pass:
