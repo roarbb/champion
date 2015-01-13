@@ -15,8 +15,9 @@ $configurator = new Configurator();
 $configurator->setConfiguration(__DIR__ . '/../src/Configuration/config.neon');
 
 $router = new Router();
-$router->setEndpoint(new Route('GET', '/', 'HomeController'));
+$router->setEndpoint(new Route('GET', '/', '\\Monoblock\\Controllers\\HomeController'));
+$router->setEndpoint(new Route('GET', '/page/@id', '\\Monoblock\\Controllers\\PageController', 'getPage'));
 $router->setEndpoint(new Route('GET', '/page', '\\Monoblock\\Controllers\\PageController', 'showAllPages'));
-$router->setEndpoint(new Route('POST', '/page', 'PageController', 'createPage'));
+$router->setEndpoint(new Route('POST', '/page', '\\Monoblock\\Controllers\\', 'createPage'));
 
 $app->start($router);

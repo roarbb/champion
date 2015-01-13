@@ -34,6 +34,7 @@ class ClassObject
 
     /**
      * @return array
+     * @throws RuntimeException
      */
     private function getConstructorParameters()
     {
@@ -46,14 +47,22 @@ class ClassObject
 
         /** @var \ReflectionParameter $parameter */
         foreach ($parameters as $parameter) {
-            $out[] = $parameter->getClass()->getName();
+            $parameterClass = $parameter->getClass();
+
+            if (is_null($parameterClass)) {
+                throw new RuntimeException("Class can not be constructed. Constructor parameters not specified.");
+            }
+
+            $out[] = $parameterClass->getName();
         }
 
         return $out;
     }
 
     /**
-     * Run initiated class method.
+     *
+     *
+     * @throws RuntimeException
      */
     public function run()
     {

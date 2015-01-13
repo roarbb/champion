@@ -15,4 +15,9 @@ class PageController
         echo "<br />";
         echo __METHOD__;
     }
+
+    public function getPage($pageId)
+    {
+        echo "Showing page with ID: " . $pageId;
+    }
 }
