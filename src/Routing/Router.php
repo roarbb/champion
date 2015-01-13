@@ -1,6 +1,5 @@
 <?php namespace Champion\Routing;
 
-use Champion\ClassRunner;
 use Champion\HttpRequest;
 use Champion\Utils\Url;
 
@@ -52,7 +51,7 @@ class Router
         if ($routeMatched) {
             $this->routeMatched = true;
 
-            $classRunner = new ClassRunner;
+            $classRunner = new RouteRunner;
             $classRunner->run($route);
         }
     }
