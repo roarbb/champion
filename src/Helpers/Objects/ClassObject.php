@@ -1,6 +1,8 @@
-<?php namespace Champion;
+<?php namespace Champion\Helpers\Objects;
 
 use Champion\Exceptions\RuntimeException;
+use Champion\Routing\Route;
+use Champion\Utils\Url;
 
 class ClassObject
 {
@@ -50,7 +52,7 @@ class ClassObject
             $parameterClass = $parameter->getClass();
 
             if (is_null($parameterClass)) {
-                throw new RuntimeException("Class can not be constructed. Constructor parameters not specified.");
+                throw new RuntimeException(sprintf("Class can not be constructed. Constructor parameter $%s not specified.", $parameter->getName()));
             }
 
             $out[] = $parameterClass->getName();
@@ -62,9 +64,10 @@ class ClassObject
     /**
      *
      *
+     * @param Route $route
      * @throws RuntimeException
      */
-    public function run()
+    public function run(Route $route)
     {
         $methodToRun = $this->classMethod;
 
@@ -73,7 +76,7 @@ class ClassObject
         }
 
         $controller = $this->getInstanceWithDependencies();
-        $controller->$methodToRun();
+        $this->runMethod($controller, $methodToRun, $route);
     }
 
     /**
@@ -90,5 +93,11 @@ class ClassObject
         }
 
         return $this->reflection->newInstanceArgs($constructParams);
+    }
+
+    private function runMethod($controller, $methodToRun, Route $route)
+    {
+        $methodObject = new MethodObject($methodToRun, $controller);
+        $methodObject->runMethodForPath($route);
     }
 }

@@ -1,6 +1,6 @@
 <?php namespace Champion\Routing;
 
-use Champion\HttpRequest;
+use Champion\Helpers\Http\HttpRequest;
 use Champion\Utils\Url;
 
 class Router

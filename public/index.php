@@ -1,7 +1,7 @@
 <?php
 
 use Champion\Application;
-use Champion\Configurator;
+use Champion\Configuration\Configurator;
 use Champion\Routing\Route;
 use Champion\Routing\Router;
 use Tracy\Debugger;
@@ -12,7 +12,7 @@ Debugger::enable();
 $app = new Application();
 
 $configurator = new Configurator();
-$configurator->setConfiguration(__DIR__ . '/../src/Configuration/config.neon');
+$configurator->setConfiguration(__DIR__ . '/../app/Configuration/config.neon');
 
 $router = new Router();
 $router->setEndpoint(new Route('GET', '/', '\\Monoblock\\Controllers\\HomeController'));

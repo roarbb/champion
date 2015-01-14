@@ -7,7 +7,7 @@ class Dependency
      */
     private $depka2;
 
-    public function __construct(DependencyAnother $depka2,array $name, $smthng)
+    public function __construct(DependencyAnother $depka2)
     {
         $this->depka2 = $depka2;
     }

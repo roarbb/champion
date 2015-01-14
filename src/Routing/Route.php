@@ -1,5 +1,7 @@
 <?php namespace Champion\Routing;
 
+use Champion\Utils\Url;
+
 class Route
 {
     /**
@@ -60,5 +62,29 @@ class Route
     public function getControllerMethod()
     {
         return $this->controllerMethod;
+    }
+
+    public function getWildCardArguments()
+    {
+        $url = new Url();
+        $actualPath = $url->getBasePath();
+        $routeMatcher = new RouteMatcher();
+        $out = array();
+
+        $actualPathParts = explode('/', $actualPath);
+        $routePathParts = explode('/', $this->getPath());
+
+        foreach ($actualPathParts as $pathKey => $pathValue) {
+            if (
+                !isset($routePathParts[$pathKey])
+                || substr($routePathParts[$pathKey], 0, 1) !== $routeMatcher->getWildCardSign()
+            ) {
+                continue;
+            }
+
+            $out[] = $pathValue;
+        }
+
+        return $out;
     }
 }

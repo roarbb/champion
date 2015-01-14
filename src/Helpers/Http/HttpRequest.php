@@ -1,4 +1,4 @@
-<?php namespace Champion;
+<?php namespace Champion\Helpers\Http;
 
 class HttpRequest
 {
