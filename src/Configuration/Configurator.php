@@ -1,4 +1,4 @@
-<?php namespace Champion;
+<?php namespace Champion\Configuration;
 
 use Champion\Exceptions\ConfigurationException;
 use Nette\Neon\Neon;
