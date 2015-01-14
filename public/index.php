@@ -18,6 +18,6 @@ $router = new Router();
 $router->setEndpoint(new Route('GET', '/', '\\Monoblock\\Controllers\\HomeController'));
 $router->setEndpoint(new Route('GET', '/page/@id', '\\Monoblock\\Controllers\\PageController', 'getPage'));
 $router->setEndpoint(new Route('GET', '/page', '\\Monoblock\\Controllers\\PageController', 'showAllPages'));
-$router->setEndpoint(new Route('POST', '/page', '\\Monoblock\\Controllers\\', 'createPage'));
+$router->setEndpoint(new Route('POST', '/page', '\\Monoblock\\Controllers\\PageController', 'createPage'));
 
 $app->start($router);

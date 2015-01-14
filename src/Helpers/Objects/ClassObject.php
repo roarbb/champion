@@ -2,7 +2,6 @@
 
 use Champion\Exceptions\RuntimeException;
 use Champion\Routing\Route;
-use Champion\Utils\Url;
 
 class ClassObject
 {
