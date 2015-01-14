@@ -29,11 +29,14 @@ class Url
 
         $parsedUri = $this->parseUrl($server);
 
+        $basePath = $this->calculateBasePath($server, $parsedUri);
+
         return array(
             'protocol' => $protocol,
             'host' => $host,
             'path' => $parsedUri['path'],
             'query' => $parsedUri['query'],
+            'basePath' => $basePath,
         );
     }
 
@@ -78,5 +81,40 @@ class Url
         }
 
         return $parsedUrl;
+    }
+
+    private function calculateBasePath($server, array $parsedUri)
+    {
+        $scriptNameWithoutFilename = $this->cleanScriptName($server['SCRIPT_NAME']);
+        $basePath = str_replace($scriptNameWithoutFilename, '', $parsedUri['path']);
+
+        if($basePath === '/') {
+            return $basePath;
+        }
+
+        // if last character is "/", return basePath without it
+        if(substr($basePath, -1) === '/') {
+            return substr($basePath, 0, -1);
+        }
+
+        return $basePath;
+    }
+
+    public function getBasePath()
+    {
+        return $this->url['basePath'];
+    }
+
+    private function cleanScriptName($scriptName)
+    {
+        $explodedName = explode('/', $scriptName);
+
+        // script name = /champion/public/index.php
+        // unset first empty part(/ in front)
+        unset($explodedName[0]);
+        // + unset filename part (index.php)
+        unset($explodedName[count($explodedName)]);
+
+        return '/' . implode('/', $explodedName);
     }
 }
