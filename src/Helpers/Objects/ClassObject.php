@@ -1,5 +1,6 @@
 <?php namespace Champion\Helpers\Objects;
 
+use Champion\Core\ServiceContainer;
 use Champion\Exceptions\RuntimeException;
 use Champion\Routing\Route;
 
@@ -61,12 +62,11 @@ class ClassObject
     }
 
     /**
-     *
-     *
      * @param Route $route
+     * @param $serviceContainer
      * @throws RuntimeException
      */
-    public function run(Route $route)
+    public function run(Route $route, ServiceContainer $serviceContainer)
     {
         $methodToRun = $this->classMethod;
 
@@ -74,21 +74,28 @@ class ClassObject
             throw new RuntimeException("Can not execute object method. Method not provided.");
         }
 
-        $controller = $this->getInstanceWithDependencies();
+        $controller = $this->getInstanceWithDependencies($serviceContainer);
         $this->runMethod($controller, $methodToRun, $route);
     }
 
     /**
+     * @param ServiceContainer $serviceContainer
      * @return object
+     * @throws RuntimeException
      */
-    public function getInstanceWithDependencies()
+    public function getInstanceWithDependencies(ServiceContainer $serviceContainer)
     {
         $constructParams = array();
         $parameters = $this->getConstructorParameters();
 
         foreach ($parameters as $className) {
+            if ($className === get_class($serviceContainer)) {
+                $constructParams[] = $serviceContainer;
+                continue;
+            }
+
             $class = new self($className);
-            $constructParams[] = $class->getInstanceWithDependencies();
+            $constructParams[] = $class->getInstanceWithDependencies($serviceContainer);
         }
 
         return $this->reflection->newInstanceArgs($constructParams);
