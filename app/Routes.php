@@ -33,6 +33,8 @@ class Routes
         );
 
         $this->router->setEndpoints($userEndpoints);
+
+        //todo: $this->router->setCrudEndpoint('/user');
     }
 
     /**
