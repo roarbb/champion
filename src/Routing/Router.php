@@ -1,5 +1,6 @@
 <?php namespace Champion\Routing;
 
+use Champion\Core\ServiceContainer;
 use Champion\Helpers\Http\HttpRequest;
 use Champion\Utils\Url;
 
@@ -8,7 +9,11 @@ class Router
     private $endPoints = array();
 
     private $routeMatched = false;
+    private $serviceContainer;
 
+    /**
+     * @param Route $route
+     */
     public function setEndpoint(Route $route)
     {
         $this->endPoints[] = $route;
@@ -22,8 +27,13 @@ class Router
         return $this->endPoints;
     }
 
-    public function match()
+    /**
+     * @param ServiceContainer $serviceContainer
+     */
+    public function match(ServiceContainer $serviceContainer)
     {
+        $this->serviceContainer = $serviceContainer;
+
         array_map(
             array($this, 'checkEndpoint'),
             $this->getEndpoints()
@@ -33,6 +43,16 @@ class Router
             echo "404";
         }
 
+    }
+
+    /**
+     * @param array $endpoints
+     */
+    public function setEndpoints(array $endpoints)
+    {
+        foreach ($endpoints as $endpoint) {
+            $this->endPoints[] = $endpoint;
+        }
     }
 
     /**
@@ -52,7 +72,7 @@ class Router
             $this->routeMatched = true;
 
             $classRunner = new RouteRunner;
-            $classRunner->run($route);
+            $classRunner->run($route, $this->serviceContainer);
         }
     }
 }

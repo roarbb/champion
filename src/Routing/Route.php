@@ -24,7 +24,7 @@ class Route
      */
     private $controllerMethod;
 
-    public function __construct($httpMethod, $path, $controller, $controllerMethod = 'default')
+    public function __construct($httpMethod, $path, $controller, $controllerMethod = 'index')
     {
         $this->httpMethod = $httpMethod;
         $this->path = $path;

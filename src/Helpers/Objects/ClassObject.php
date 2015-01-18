@@ -1,5 +1,6 @@
 <?php namespace Champion\Helpers\Objects;
 
+use Champion\Core\ServiceContainer;
 use Champion\Exceptions\RuntimeException;
 use Champion\Routing\Route;
 
@@ -22,6 +23,7 @@ class ClassObject
     {
         $this->className = $controllerName;
         $this->reflection = new \ReflectionClass($controllerName);
+        $this->properties = $this->reflection->getProperties();
         $this->classMethod = $controllerMethod;
     }
 
@@ -51,7 +53,7 @@ class ClassObject
             $parameterClass = $parameter->getClass();
 
             if (is_null($parameterClass)) {
-                throw new RuntimeException(sprintf("Class can not be constructed. Constructor parameter $%s not specified.", $parameter->getName()));
+                throw new RuntimeException(sprintf("Class '" . $this->className . "' can not be constructed. Constructor parameter $%s not specified.", $parameter->getName()));
             }
 
             $out[] = $parameterClass->getName();
@@ -61,12 +63,11 @@ class ClassObject
     }
 
     /**
-     *
-     *
      * @param Route $route
+     * @param $serviceContainer
      * @throws RuntimeException
      */
-    public function run(Route $route)
+    public function run(Route $route, ServiceContainer $serviceContainer)
     {
         $methodToRun = $this->classMethod;
 
@@ -74,29 +75,50 @@ class ClassObject
             throw new RuntimeException("Can not execute object method. Method not provided.");
         }
 
-        $controller = $this->getInstanceWithDependencies();
+        $controller = $this->getInstanceWithDependencies($serviceContainer);
         $this->runMethod($controller, $methodToRun, $route);
     }
 
     /**
+     * @param ServiceContainer $serviceContainer
      * @return object
+     * @throws RuntimeException
      */
-    public function getInstanceWithDependencies()
+    public function getInstanceWithDependencies(ServiceContainer $serviceContainer)
     {
         $constructParams = array();
         $parameters = $this->getConstructorParameters();
 
         foreach ($parameters as $className) {
+            if ($className === get_class($serviceContainer)) {
+                $constructParams[] = $serviceContainer;
+                continue;
+            }
+
             $class = new self($className);
-            $constructParams[] = $class->getInstanceWithDependencies();
+            $constructParams[] = $class->getInstanceWithDependencies($serviceContainer);
         }
 
-        return $this->reflection->newInstanceArgs($constructParams);
+        $instance = $this->reflection->newInstanceArgs($constructParams);
+
+        $this->setInjectProperties($instance, $serviceContainer);
+
+        return $instance;
     }
 
     private function runMethod($controller, $methodToRun, Route $route)
     {
         $methodObject = new MethodObject($methodToRun, $controller);
         $methodObject->runMethodForPath($route);
+    }
+
+    private function setInjectProperties($instance, ServiceContainer $serviceContainer)
+    {
+        if(empty($this->properties)) {
+            return false;
+        }
+
+        $propertiesInjector = new PropertiesInjector();
+        $propertiesInjector->injectProperties($instance, $this->properties, $serviceContainer);
     }
 }

@@ -17,7 +17,7 @@ class PageController
 
         echo "<form method='post'>";
         echo "<input type='submit' value='call post request - PageController::createPage()'>";
-        echo "<input type='hidden' name='test' value='value' />";
+        echo "<input type='hidden' name='test-result' value='success' />";
         echo "</form>";
     }
 
