@@ -9,13 +9,18 @@ class ServiceContainer
         $this->services[get_class($service)] = $service;
     }
 
+    /**
+     * @param $className
+     * @return mixed
+     * @throws ServiceNotFoundException
+     */
     public function get($className)
     {
         if (isset($this->services[$className])) {
             return $this->services[$className];
         }
 
-        return null;
+        throw new ServiceNotFoundException(sprintf('Service "%s" not found in %s', $className, __CLASS__));
     }
 
     public function getList()

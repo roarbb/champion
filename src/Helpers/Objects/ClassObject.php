@@ -23,6 +23,7 @@ class ClassObject
     {
         $this->className = $controllerName;
         $this->reflection = new \ReflectionClass($controllerName);
+        $this->properties = $this->reflection->getProperties();
         $this->classMethod = $controllerMethod;
     }
 
@@ -52,7 +53,7 @@ class ClassObject
             $parameterClass = $parameter->getClass();
 
             if (is_null($parameterClass)) {
-                throw new RuntimeException(sprintf("Class can not be constructed. Constructor parameter $%s not specified.", $parameter->getName()));
+                throw new RuntimeException(sprintf("Class '" . $this->className . "' can not be constructed. Constructor parameter $%s not specified.", $parameter->getName()));
             }
 
             $out[] = $parameterClass->getName();
@@ -98,12 +99,26 @@ class ClassObject
             $constructParams[] = $class->getInstanceWithDependencies($serviceContainer);
         }
 
-        return $this->reflection->newInstanceArgs($constructParams);
+        $instance = $this->reflection->newInstanceArgs($constructParams);
+
+        $this->setInjectProperties($instance, $serviceContainer);
+
+        return $instance;
     }
 
     private function runMethod($controller, $methodToRun, Route $route)
     {
         $methodObject = new MethodObject($methodToRun, $controller);
         $methodObject->runMethodForPath($route);
+    }
+
+    private function setInjectProperties($instance, ServiceContainer $serviceContainer)
+    {
+        if(empty($this->properties)) {
+            return false;
+        }
+
+        $propertiesInjector = new PropertiesInjector();
+        $propertiesInjector->injectProperties($instance, $this->properties, $serviceContainer);
     }
 }

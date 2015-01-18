@@ -1,6 +1,5 @@
 <?php namespace Monoblock\Models;
 
-
 use Monoblock\Documents\User;
 
 class UserRepository extends Repository
@@ -19,8 +18,8 @@ class UserRepository extends Repository
 
     public function getAll()
     {
-        $qb = $this->documentManager->createQueryBuilder('Monoblock\Documents\User');
-        $query = $qb->getQuery();
+        $queryBuilder = $this->documentManager->createQueryBuilder('Monoblock\Documents\User');
+        $query = $queryBuilder->getQuery();
 
         return $query->execute();
     }

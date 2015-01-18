@@ -2,15 +2,17 @@
 
 use Monoblock\Models\UserRepository;
 
-class UserController
+/**
+ * Class UserController
+ * @package Monoblock\Controllers
+ */
+class UserController extends Controller
 {
-    /** @var UserRepository */
-    private $userRepository;
-
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
+    /**
+     * @var UserRepository
+     * @inject Monoblock\Models\UserRepository
+     */
+    public $userRepository;
 
     public function index()
     {
@@ -23,8 +25,8 @@ class UserController
 
     public function createUser()
     {
-        $name = 'Marek';
-        $this->userRepository->create($name, $name . '@gmail.com', new \Datetime());
+        $name = 'Miloš';
+        $this->userRepository->create($name, lcfirst($name) . '@gmail.com', new \Datetime());
         \Tracy\Debugger::dump('User ' . $name . ' Created.');
     }
 }
