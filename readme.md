@@ -6,6 +6,10 @@ I will use some of my favourites libraries, as well libraries that I always want
 
 ## Key features
 
+_version 1.1_
+* Dependency Injection (using anotations)
+* MongoDB Doctrine ORM
+
 _version 1.0_
 * Routing
-* Dependency Injection
+* Dependency Injection (using constructor)
