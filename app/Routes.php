@@ -34,6 +34,13 @@ class Routes
 
         $this->router->setEndpoints($userEndpoints);
 
+        $securityEndpoints = array(
+            new Route('GET', '/security', '\Monoblock\Controllers\SecurityController'),
+            new Route('GET', '/security/register', '\Monoblock\Controllers\SecurityController', 'register'),
+            new Route('POST', '/security/register', '\Monoblock\Controllers\SecurityController', 'register'),
+        );
+        $this->router->setEndpoints($securityEndpoints);
+
         //todo: $this->router->setCrudEndpoint('/user');
     }
 
