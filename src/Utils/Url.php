@@ -117,4 +117,15 @@ class Url
 
         return '/' . implode('/', $explodedName);
     }
+
+    public function getAppBaseUri()
+    {
+        $trimmedPath = rtrim($this->url['path'], '/');
+
+        if ($this->url['basePath'] === '/') {
+            return $trimmedPath;
+        }
+
+        return str_replace($this->url['basePath'], '', $trimmedPath);
+    }
 }

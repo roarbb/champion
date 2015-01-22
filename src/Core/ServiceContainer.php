@@ -1,5 +1,7 @@
 <?php namespace Champion\Core;
 
+use Champion\Exceptions\ServiceNotFoundException;
+
 class ServiceContainer
 {
     private $services = array();

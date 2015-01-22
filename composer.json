@@ -12,11 +12,14 @@
     }
   ],
   "require": {
-    "phpmd/phpmd" : "@stable",
-    "squizlabs/php_codesniffer": "2.*",
-    "tracy/tracy": "~2.2",
+    "tracy/tracy": "2.3.*@dev",
     "nette/neon": "2.3.*@dev",
+    "nette/forms": "2.3.*@dev",
     "doctrine/mongodb-odm": "1.0.*@dev"
+  },
+  "require-dev": {
+    "phpmd/phpmd" : "@stable",
+    "squizlabs/php_codesniffer": "2.*"
   },
   "autoload": {
     "psr-4": {

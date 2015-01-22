@@ -14,6 +14,9 @@ class User
     /** @ODM\String */
     private $email;
 
+    /** @ODM\String */
+    private $password;
+
     /** @ODM\Date */
     private $createdAt;
 
@@ -27,11 +30,29 @@ class User
         $this->email = $email;
     }
 
-    /**
-     * @param mixed $createdAt
-     */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+    }
+
+    public function setPassword($hash)
+    {
+        $this->password = $hash;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }
