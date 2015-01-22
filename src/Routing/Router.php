@@ -2,6 +2,7 @@
 
 use Champion\Core\ServiceContainer;
 use Champion\Helpers\Http\HttpRequest;
+use Champion\Security\IAuthenticator;
 use Champion\Utils\Url;
 
 class Router
@@ -9,7 +10,16 @@ class Router
     private $endPoints = array();
 
     private $routeMatched = false;
+
+    /**
+     * @var ServiceContainer
+     */
     private $serviceContainer;
+
+    /**
+     * @var IAuthenticator
+     */
+    private $authenticator;
 
     /**
      * @param Route $route
@@ -56,6 +66,14 @@ class Router
     }
 
     /**
+     * @param IAuthenticator $authenticator
+     */
+    public function setAuthenticator(IAuthenticator $authenticator)
+    {
+        $this->authenticator = $authenticator;
+    }
+
+    /**
      * @param Route $route
      *
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
@@ -70,6 +88,10 @@ class Router
 
         if ($routeMatched) {
             $this->routeMatched = true;
+
+            if ($route->isGuarded() && !$this->authenticator->isAuthenticated()) {
+                $this->authenticator->redirectToLogin();
+            }
 
             $classRunner = new RouteRunner;
             $classRunner->run($route, $this->serviceContainer);

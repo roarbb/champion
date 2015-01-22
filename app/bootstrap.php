@@ -3,10 +3,12 @@
 use Champion\Configuration\Configurator;
 use Champion\Core\Application;
 use Champion\Core\ServiceContainer;
+use Champion\Routing\Router;
 use Doctrine\MongoDB\Connection;
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
+use Monoblock\Models\MongoAuthenticator;
 use Monoblock\Routes;
 use Tracy\Debugger;
 
@@ -14,22 +16,23 @@ include_once(__DIR__ . '/../vendor/autoload.php');
 Debugger::enable();
 Debugger::$maxDepth = 10;
 
-/** @var $application */
+// ######### Basic Objects ##################
 $application = new Application();
+$serviceContainer = new ServiceContainer();
+$application->setServiceContainer($serviceContainer);
 
+// ######### Configurator ##################
 $configurator = new Configurator();
 $configurator->setConfiguration(__DIR__ . '/../app/Configuration/config.neon');
-
-$serviceContainer = new ServiceContainer();
 $serviceContainer->addService($configurator);
 
-$routes = new Routes();
-$router = $routes->getRouter();
-
+// ######### Routing ##################
+$router = new Router();
+$routes = new Routes($router);
+$routes->setRoutes();
 $application->setRouter($router);
 
-
-// ---------------- MongoDB Start ---------------------------
+// ######### Mongo Doctrine Setup ##################
 $connection = new Connection();
 $config = new Configuration();
 
@@ -45,8 +48,11 @@ AnnotationDriver::registerAnnotationClasses();
 $documentManager = DocumentManager::create($connection, $config);
 
 $serviceContainer->addService($documentManager);
-// ---------------- MongoDB End -----------------------------
 
-$application->setServiceContainer($serviceContainer);
+// ######### Authenticator ##################
+$authenticator = new MongoAuthenticator($documentManager);
+$serviceContainer->addService($authenticator);
+$application->setAuthenticator($authenticator);
 
+// ######### Return Initialized AppObject ##################
 return $application;

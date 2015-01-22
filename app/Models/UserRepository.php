@@ -17,6 +17,8 @@ class UserRepository extends Repository
 
         $this->documentManager->persist($user);
         $this->documentManager->flush();
+
+        return $user;
     }
 
     public function getAll()

@@ -1,6 +1,6 @@
 <?php namespace Monoblock\Controllers;
 
-class HomeController
+class HomeController extends Controller
 {
     public function index()
     {
