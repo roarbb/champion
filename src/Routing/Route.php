@@ -24,7 +24,12 @@ class Route
      */
     private $controllerMethod;
 
-    public function __construct($httpMethod, $path, $controller, $controllerMethod = 'default')
+    /**
+     * @var bool
+     */
+    protected $guarded = false;
+
+    public function __construct($httpMethod, $path, $controller, $controllerMethod = 'index')
     {
         $this->httpMethod = $httpMethod;
         $this->path = $path;
@@ -75,8 +80,7 @@ class Route
         $routePathParts = explode('/', $this->getPath());
 
         foreach ($actualPathParts as $pathKey => $pathValue) {
-            if (
-                !isset($routePathParts[$pathKey])
+            if (!isset($routePathParts[$pathKey])
                 || substr($routePathParts[$pathKey], 0, 1) !== $routeMatcher->getWildCardSign()
             ) {
                 continue;
@@ -86,5 +90,20 @@ class Route
         }
 
         return $out;
+    }
+
+    public function guard()
+    {
+        $this->guarded = true;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isGuarded()
+    {
+        return $this->guarded;
     }
 }
