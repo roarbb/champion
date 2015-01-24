@@ -35,7 +35,7 @@ class SecurityController extends Controller
             $this->createuser($form->getValues());
         }
 
-        echo $form;
+        $this->render(array('registerForm' => $form));
     }
 
     public function createUser($values)
@@ -45,7 +45,7 @@ class SecurityController extends Controller
         $this->redirect('/security/login');
     }
 
-    public function loginUser()
+    public function login()
     {
         if ($this->authenticator->isAuthenticated()) {
             $this->redirect('/admin');
@@ -62,7 +62,7 @@ class SecurityController extends Controller
             $this->tryToLogIn($form, $form->getValues());
         }
 
-        echo $form;
+        $this->render(array('loginForm' => $form));
     }
 
     private function tryToLogIn(Form $form, $values)

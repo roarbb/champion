@@ -1,0 +1,15 @@
+{extends $layout}
+
+{block title}Users{/block}
+
+{block content}
+    {if $users}
+        <h2>Registered users</h2>
+        {foreach $users as $user}
+            <ul>
+                <li>Name: {$user->getName()}</li>
+                <li>Email: {$user->getEmail()} <br/></li>
+            </ul>
+        {/foreach}
+    {/if}
+{/block}

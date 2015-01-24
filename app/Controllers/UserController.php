@@ -18,9 +18,6 @@ class UserController extends Controller
     public function index()
     {
         $users = $this->userRepository->getAll();
-
-        foreach ($users as $user) {
-            \Tracy\Debugger::dump($user);
-        }
+        $this->render(array('users' => $users));
     }
 }

@@ -14,7 +14,7 @@ class RouteMatcher
      *
      * @return bool
      */
-    public function match(Route $route, Url $url, HttpRequest $httpRequest)
+    public function match(Route $route, Url $url, HttpRequest $httpRequest = null)
     {
         $routePath = $route->getPath();
         $actualPath = $url->getBasePath();
@@ -43,14 +43,20 @@ class RouteMatcher
         return count(explode('/', $path));
     }
 
-    private function pathsCompatible($routePath, $actualPath)
+    /**
+     * Determine if 2 strings are compatible paths
+     *
+     * @param $routePath
+     * @param $actualPath
+     * @return bool
+     */
+    public function pathsCompatible($routePath, $actualPath)
     {
         $routePathParts = explode('/', $routePath);
         $actualPathParts = explode('/', $actualPath);
 
         foreach ($actualPathParts as $pathKey => $pathString) {
-            if (
-                $this->firstCharacterIsWildcard($routePathParts, $pathKey)
+            if ($this->firstCharacterIsWildcard($routePathParts, $pathKey)
                 || $this->partsAreIdentical($pathString, $routePathParts, $pathKey)
             ) {
                 continue;

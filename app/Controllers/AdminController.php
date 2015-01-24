@@ -9,6 +9,6 @@ class AdminController extends Controller
         /** @var User $user */
         $user = $this->authenticator->getUser();
 
-        \Tracy\Debugger::dump('Yay, Admin! Welcome ' . $user->getName());
+        $this->render(array('user' => $user));
     }
 }

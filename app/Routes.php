@@ -43,8 +43,8 @@ class Routes
             new Route('GET', '/security/register', '\Monoblock\Controllers\SecurityController', 'register'),
             new Route('POST', '/security/register', '\Monoblock\Controllers\SecurityController', 'register'),
 
-            new Route('GET', '/security/login', '\Monoblock\Controllers\SecurityController', 'loginUser'),
-            new Route('POST', '/security/login', '\Monoblock\Controllers\SecurityController', 'loginUser'),
+            new Route('GET', '/security/login', '\Monoblock\Controllers\SecurityController', 'login'),
+            new Route('POST', '/security/login', '\Monoblock\Controllers\SecurityController', 'login'),
 
             new Route('GET', '/security/logout', '\Monoblock\Controllers\SecurityController', 'logout'),
         );

@@ -55,4 +55,12 @@ class User
     {
         return $this->name;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
 }
