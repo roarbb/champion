@@ -4,6 +4,7 @@ use Champion\Configuration\Configurator;
 use Champion\Core\Application;
 use Champion\Core\ServiceContainer;
 use Champion\Routing\Router;
+use Champion\Utils\Environment;
 use Doctrine\MongoDB\Connection;
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\DocumentManager;
@@ -13,7 +14,9 @@ use Monoblock\Routes;
 use Tracy\Debugger;
 
 include_once(__DIR__ . '/../vendor/autoload.php');
-Debugger::enable();
+
+// ######### Tracy Debugger ##################
+Debugger::enable(DEBUGGER::DETECT, __DIR__ . '/../log');
 Debugger::$maxDepth = 10;
 
 // ######### Basic Objects ##################
@@ -23,7 +26,13 @@ $application->setServiceContainer($serviceContainer);
 
 // ######### Configurator ##################
 $configurator = new Configurator();
-$configurator->setConfiguration(__DIR__ . '/../app/Configuration/config.neon');
+$configFile = __DIR__ . '/../app/Configuration/config.neon';
+
+if (Environment::isLocalEnvironment()) {
+    $configFile = __DIR__ . '/../app/Configuration/config.local.neon';
+}
+
+$configurator->setConfiguration($configFile);
 $serviceContainer->addService($configurator);
 
 // ######### Routing ##################

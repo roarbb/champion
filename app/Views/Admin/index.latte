@@ -1,0 +1,17 @@
+{extends $layout}
+
+{block title}Admin{/block}
+
+{block content}
+    <div class="row">
+        <a class="btn btn-primary" type="button" href="{$basePath}/admin/user/">
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+            Users <span class="badge">4</span>
+        </a>
+
+        <a class="btn btn-primary" type="button" href="{$basePath}/admin/recipes/">
+            <span class="glyphicon glyphicon-apple" aria-hidden="true"></span>
+            Recipes <span class="badge">4</span>
+        </a>
+    </div>
+{/block}
