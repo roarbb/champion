@@ -5,6 +5,8 @@ His only purpose is to find out how complex aplications can be written. With acc
 I will use some of my favourites libraries, as well libraries that I always wanted to play with. 
 
 ## Key features
+_unreleased_
+* Templating (redirecting, basic template variables, macros)
 
 _version 1.2_
 * Implemented Mongo Authenticator

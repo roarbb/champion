@@ -28,4 +28,13 @@ class UserRepository extends Repository
 
         return $query->execute();
     }
+
+    public function deleteUser($userId)
+    {
+        $this->documentManager->createQueryBuilder('Monoblock\Documents\User')
+            ->remove()
+            ->field('id')->equals($userId)
+            ->getQuery()
+            ->execute();
+    }
 }

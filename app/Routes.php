@@ -18,37 +18,19 @@ class Routes
 
     public function setRoutes()
     {
-        $this->router->setEndpoints(
-            array(
-                new Route('GET', '/', '\Monoblock\Controllers\HomeController'),
-                new Route('GET', '/user', '\Monoblock\Controllers\UserController'),
-            )
-        );
+        $endpoints = array();
 
-        $this->router->setEndpoints(
-            array(
-                new Route('GET', '/page/@id', '\Monoblock\Controllers\PageController', 'getPage'),
-                new Route('GET', '/page', '\Monoblock\Controllers\PageController', 'showAllPages'),
-                new Route('POST', '/page', '\Monoblock\Controllers\PageController', 'createPage'),
-            )
-        );
+        $endpoints[] = new Route('GET', '/', '\Monoblock\Controllers\HomeController');
+        $endpoints[] = new Route('GET|POST', '/auth/login', '\Monoblock\Controllers\AuthController', 'login');
+        $endpoints[] = new Route('GET', '/auth/logout', '\Monoblock\Controllers\AuthController', 'logout');
 
-        $this->router->setEndpoint(
-            new SecureRoute('GET', '/admin', '\Monoblock\Controllers\AdminController')
-        );
+        $endpoints[] = new SecureRoute('GET', '/admin', '\Monoblock\Controllers\Admin\AdminController');
+        $endpoints[] = new SecureRoute('GET', '/admin/user', '\Monoblock\Controllers\Admin\UserController');
+        $endpoints[] = new SecureRoute('GET|POST', '/admin/user/add', '\Monoblock\Controllers\Admin\UserController', 'add');
+        $endpoints[] = new SecureRoute('GET', '/admin/user/delete/@id', '\Monoblock\Controllers\Admin\UserController', 'delete');
+        $endpoints[] = new SecureRoute('GET', '/admin/user/edit/@id', '\Monoblock\Controllers\Admin\UserController', 'edit');
 
-        $securityEndpoints = array(
-            new Route('GET', '/security', '\Monoblock\Controllers\SecurityController'),
-
-            new Route('GET', '/security/register', '\Monoblock\Controllers\SecurityController', 'register'),
-            new Route('POST', '/security/register', '\Monoblock\Controllers\SecurityController', 'register'),
-
-            new Route('GET', '/security/login', '\Monoblock\Controllers\SecurityController', 'loginUser'),
-            new Route('POST', '/security/login', '\Monoblock\Controllers\SecurityController', 'loginUser'),
-
-            new Route('GET', '/security/logout', '\Monoblock\Controllers\SecurityController', 'logout'),
-        );
-        $this->router->setEndpoints($securityEndpoints);
+        $this->router->setEndpoints($endpoints);
 
         //todo: $this->router->setCrudEndpoint('/user');
     }

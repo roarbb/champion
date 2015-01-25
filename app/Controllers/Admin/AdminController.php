@@ -1,5 +1,6 @@
-<?php namespace Monoblock\Controllers;
+<?php namespace Monoblock\Controllers\Admin;
 
+use Monoblock\Controllers\Controller;
 use Monoblock\Documents\User;
 
 class AdminController extends Controller
@@ -9,6 +10,6 @@ class AdminController extends Controller
         /** @var User $user */
         $user = $this->authenticator->getUser();
 
-        \Tracy\Debugger::dump('Yay, Admin! Welcome ' . $user->getName());
+        $this->render(array('user' => $user));
     }
 }
