@@ -63,4 +63,12 @@ class User
     {
         return $this->email;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }

@@ -3,13 +3,18 @@
 {block title}Users{/block}
 
 {block content}
-    {if $users}
-        <h2>Registered users</h2>
-        {foreach $users as $user}
-            <ul>
-                <li>Name: {$user->getName()}</li>
-                <li>Email: {$user->getEmail()} <br/></li>
-            </ul>
-        {/foreach}
-    {/if}
+    <h2>
+        <a class="btn btn-primary btn-xs" type="button" href="{$basePath}/admin/">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        </a>
+        Registered users
+    </h2>
+    <hr/>
+    {$datagrid|noescape}
+    <hr/>
+    <div class="pull-right">
+        <a class="btn btn-primary" type="button" href="{$basePath}/admin/user/add">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+        </a>
+    </div>
 {/block}

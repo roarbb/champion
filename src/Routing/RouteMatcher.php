@@ -23,7 +23,7 @@ class RouteMatcher
             return false;
         }
 
-        if ($route->getHttpMethod() !== $httpRequest->getMethod()) {
+        if (!$this->compatibleRequestMethod($route, $httpRequest)) {
             return false;
         }
 
@@ -54,6 +54,10 @@ class RouteMatcher
     {
         $routePathParts = explode('/', $routePath);
         $actualPathParts = explode('/', $actualPath);
+
+        if ($this->getPathPartsCount($routePath) !== $this->getPathPartsCount($actualPath)) {
+            return false;
+        }
 
         foreach ($actualPathParts as $pathKey => $pathString) {
             if ($this->firstCharacterIsWildcard($routePathParts, $pathKey)
@@ -90,7 +94,7 @@ class RouteMatcher
      */
     private function partsAreIdentical($path, $routePathParts, $key)
     {
-        return $path === $routePathParts[$key];
+        return isset($routePathParts[$key]) && $path === $routePathParts[$key];
     }
 
     /**
@@ -99,5 +103,16 @@ class RouteMatcher
     public function getWildCardSign()
     {
         return $this->wildCardSign;
+    }
+
+    /**
+     * @param Route $route
+     * @param HttpRequest $httpRequest
+     * @return bool
+     */
+    private function compatibleRequestMethod(Route $route, HttpRequest $httpRequest)
+    {
+        $allowedMethods = explode('|', $route->getHttpMethod());
+        return in_array($httpRequest->getMethod(), $allowedMethods);
     }
 }

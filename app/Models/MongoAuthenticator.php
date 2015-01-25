@@ -80,7 +80,7 @@ class MongoAuthenticator implements IAuthenticator
      */
     public function redirectToLogin()
     {
-        $this->redirect('/security/login');
+        $this->redirect('/auth/login');
     }
 
     /**

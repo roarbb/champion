@@ -12,27 +12,27 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li {ifCurrent}class="active"{/ifCurrent}><a href="{$basePath}">Home</a></li>
-                <li {ifCurrent /user}class="active"{/ifCurrent}><a href="{$basePath}/user">User</a></li>
-                <li class="dropdown {ifCurrent /security/@any}active{/ifCurrent}">
-                    <a href class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Security <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li {ifCurrent /security/register}class="active"{/ifCurrent}><a href="{$basePath}/security/register">Register</a></li>
-                        <li {ifCurrent /security/login}class="active"{/ifCurrent}><a href="{$basePath}/security/login">Login</a></li>
-                        <li><a href="{$basePath}/security/logout">Logout</a></li>
-                    </ul>
-                </li>
+                <li {ifCurrent}class="active"{/ifCurrent}><a href="{$basePath}">Dashboard</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="{ifCurrent /admin}active{/ifCurrent}">
-                    <a href="{$basePath}/admin">
-                        {if $user}
-                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {$user->getName()}
-                        {else}
+                {if $user}
+                    <li class="dropdown {ifCurrent /admin}active{/ifCurrent}">
+                        <a href="{$basePath}/admin/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {$user->getName()} <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li {ifCurrent /admin}class="active"{/ifCurrent}><a href="{$basePath}/admin/">Admin Dashboard</a></li>
+                            <li {ifCurrent /admin/user/add}class="active"{/ifCurrent}><a href="{$basePath}/admin/user/add">Add User</a></li>
+                            <li><a href="{$basePath}/auth/logout">Logout</a></li>
+                        </ul>
+                    </li>
+                {else}
+                    <li>
+                        <a href="{$basePath}/admin">
                             <span class="glyphicon glyphicon-console" aria-hidden="true"></span>
-                        {/if}
-                    </a>
-                </li>
+                        </a>
+                    </li>
+                {/if}
             </ul>
         </div><!--/.nav-collapse -->
     </div>
