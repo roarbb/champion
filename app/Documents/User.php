@@ -2,11 +2,13 @@
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
-/** @ODM\Document */
+/**
+ * @ODM\Document(repositoryClass="UserRepository")
+ */
 class User
 {
     /** @ODM\Id */
-    private $id;
+    private $userId;
 
     /** @ODM\String */
     private $name;
@@ -57,7 +59,7 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getEmail()
     {
@@ -65,10 +67,10 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getId()
+    public function getUserId()
     {
-        return $this->id;
+        return $this->userId;
     }
 }
