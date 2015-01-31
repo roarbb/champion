@@ -1,0 +1,187 @@
+{extends $layout}
+
+{block title}Add Recipe{/block}
+
+{block content}
+    <div class="page-header">
+        <h1>New recipe <small class="recipe-title"></small></h1>
+    </div>
+
+    {$form->render('begin')}
+    {$form->render('errors')}
+
+    <div class="form-group">
+        <div class="col-sm-2 control-label">
+            {$form['name']->label}
+        </div>
+        <div class="col-sm-10">
+            {$form['name']->control}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-2 control-label">
+            {$form['description']->label}
+        </div>
+        <div class="col-sm-10">
+            {$form['description']->control}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-2 control-label">
+            {$form['instructions']->label}
+        </div>
+        <div class="col-sm-10">
+            {$form['instructions']->control}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-2 control-label">
+            {$form['tags']->label}
+        </div>
+        <div class="col-sm-4">
+            {$form['tags']->control}
+        </div>
+
+        <div class="col-sm-2 control-label">
+            {$form['mealType']->label}
+        </div>
+        <div class="col-sm-4">
+            {$form['mealType']->control}
+        </div>
+    </div>
+
+    <br/>
+    <h3 class="col-sm-offset-2">Ingredients</h3>
+
+    {var row = 1}
+    {foreach $form['ingredients']->components as $component}
+        {if strpos($component->name,'_name') !== false}
+        <div class="form-group ingredient {if $row==1}first showing-ingredient{else}hided-ingredient{/if} ingredient-row-{$row}">
+            <div class="col-sm-2 control-label">
+                {$component->label}
+            </div>
+            <div class="col-sm-3">
+                {$component->control}
+            </div>
+        {/if}
+
+        {if strpos($component->name,'_amount') !== false}
+            <div class="col-sm-1 control-label">
+                {$component->label}
+            </div>
+            <div class="col-sm-2">
+                {$component->control}
+            </div>
+        {/if}
+
+        {if strpos($component->name,'_unit') !== false}
+            <div class="col-sm-1 control-label">
+                {$component->label}
+            </div>
+            <div class="col-sm-2">
+                {$component->control}
+            </div>
+            <div class="col-sm-1">
+                <a class="btn btn-block btn-danger remove-ingredient" data-id="{$row}" {if $row==1}disabled="disabled"{/if}>
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>
+            </div>
+        </div>
+
+        {if strpos($component->name,'_id') !== false}
+            <div class="hidden">
+                {$component->control}
+            </div>
+        {/if}
+
+        {var row += 1}
+        {/if}
+    {/foreach}
+
+    <div class="form-group">
+        <div class="col-sm-offset-11 col-sm-1">
+            <a class="btn btn-block btn-success add-ingredient">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </a>
+        </div>
+    </div>
+
+    <hr/>
+
+    <div class="form-group clearfix">
+        <div class="col-sm-offset-2 col-sm-10 text-right">
+            {$form['submit']->control}
+        </div>
+    </div>
+
+    {$form->render('end')}
+{/block}
+
+{block script}
+    <script src="{$basePath}/www/js/sweet-alert.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.ingredient').each(function() {
+                if ($(this).find('input').first().val() == '') {
+                    $(this).hide().addClass('hided-ingredient').removeClass('showing-ingredient');
+                } else {
+                    $(this).removeClass('hided-ingredient').addClass('showing-ingredient');
+                }
+            })
+            $('.first').show();
+
+            $('.ingredient input').on('change', function() {
+                if($(this).parent().hasClass('has-error') && $(this).val() !== '') {
+                    $(this).parent().removeClass('has-error');
+                }
+            });
+
+            $('.remove-ingredient').on('click', function() {
+                var rowId = $(this).data('id');
+
+                $('.ingredient-row-' + rowId).removeClass('showing-ingredient')
+                        .addClass('hided-ingredient')
+                        .hide()
+                        .find('input')
+                        .val('');
+            })
+
+            $('.add-ingredient').on('click', function() {
+                $('.hided-ingredient')
+                    .first()
+                    .removeClass('hided-ingredient')
+                    .addClass('showing-ingredient')
+                    .show();
+            })
+
+            $('#frm-recipe').on('submit', function() {
+                var canBeSubmitted = true;
+
+                $('.showing-ingredient input').each(function() {
+                    if ($(this).val() === "") {
+                        $(this).parent().addClass('has-error');
+                        canBeSubmitted = false;
+                    }
+                });
+
+                if (!canBeSubmitted) {
+                    sweetAlert("Oops...", "Fill all ingredients or Delete it.", "error");
+                }
+
+                return canBeSubmitted;
+            })
+
+            $('.recipe-title').html($(this).val());
+            $('#frm-name').keyup(function() {
+                $('.recipe-title').html($(this).val());
+            })
+        })
+    </script>
+{/block}
+
+{block head}
+    <link rel="stylesheet" type="text/css" href="{$basePath}/www/css/sweet-alert.css">
+{/block}

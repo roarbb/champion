@@ -3,19 +3,13 @@
 use Monoblock\Controllers\Controller;
 use Monoblock\Datagrids\UserListDatagrid;
 use Monoblock\Forms\UserEditForm;
-use Monoblock\Models\UserRepository;
 
 class UserController extends Controller
 {
-    /**
-     * @var UserRepository
-     * @inject Monoblock\Models\UserRepository
-     */
-    public $userRepository;
-
     public function index()
     {
-        $users = $this->userRepository->getAll();
+        $users = $this->documentManager->getRepository('Monoblock\Documents\User')->getAll();
+
         $datagrid = new UserListDatagrid($users);
 
         $this->render(array('datagrid' => $datagrid));
@@ -24,12 +18,13 @@ class UserController extends Controller
     public function add()
     {
         $form = new UserEditForm();
-        $this->render(array('registerForm' => $form->getForm($this->userRepository)));
+        $userRepository = $this->documentManager->getRepository('Monoblock\Documents\User');
+        $this->render(array('registerForm' => $form->getForm($userRepository)));
     }
 
     public function delete($userId)
     {
-        $this->userRepository->deleteUser($userId);
+        $this->documentManager->getRepository('Monoblock\Documents\User')->deleteUser($userId);
         $this->redirect('/admin/user/');
     }
 

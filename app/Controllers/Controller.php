@@ -3,14 +3,12 @@
 use Champion\Configuration\Configurator;
 use Champion\Core\ServiceContainer;
 use Champion\Exceptions\ServiceNotFoundException;
-use Champion\Routing\RouteMatcher;
 use Champion\Utils\Environment;
 use Champion\Utils\Macros\MacroLoader;
 use Champion\Utils\Redirector;
 use Champion\Utils\Url;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Latte\Engine;
-use Latte\MacroNode;
-use Latte\Macros\MacroSet;
 use Monoblock\Models\MongoAuthenticator;
 
 class Controller
@@ -32,9 +30,20 @@ class Controller
      */
     protected $action;
 
+    /**
+     * @var DocumentManager
+     */
+    protected $documentManager;
+
+    /**
+     * @var string
+     */
+    private $forcedView;
+
     public function __construct(ServiceContainer $serviceContainer)
     {
         $this->serviceContainer = $serviceContainer;
+        $this->documentManager = $this->serviceContainer->get('Doctrine\ODM\MongoDB\DocumentManager');
 
         try {
             $this->authenticator = $this->serviceContainer->get('Monoblock\Models\MongoAuthenticator');
@@ -86,6 +95,17 @@ class Controller
         $parsedController = explode('\\', $calledClass);
         $folder = ucfirst(str_replace('Controller', '', end($parsedController)));
 
-        return sprintf('%s/../Views/%s/%s.latte', __DIR__, $folder, $this->getAction());
+        $templateFileName = $this->getAction();
+
+        if ($this->forcedView) {
+            $templateFileName = $this->forcedView;
+        }
+
+        return sprintf('%s/../Views/%s/%s.latte', __DIR__, $folder, $templateFileName);
+    }
+
+    protected function setView($viewName)
+    {
+        $this->forcedView = $viewName;
     }
 }

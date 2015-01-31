@@ -2,7 +2,8 @@
 
 use Champion\Utils\Form\BootstrapRenderer;
 use Champion\Utils\Redirector;
-use Monoblock\Models\UserRepository;
+use Doctrine\ODM\MongoDB\DocumentRepository;
+use Documents\UserRepository;
 use Nette\Forms\Form;
 
 class UserEditForm
@@ -15,7 +16,7 @@ class UserEditForm
      */
     private $userRepository;
 
-    public function getForm(UserRepository $userRepository)
+    public function getForm(DocumentRepository $userRepository)
     {
         $this->userRepository = $userRepository;
 
