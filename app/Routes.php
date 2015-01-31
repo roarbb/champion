@@ -33,6 +33,7 @@ class Routes
         $endpoints[] = new SecureRoute('GET', '/admin/recipes', '\Monoblock\Controllers\Admin\RecipesController');
         $endpoints[] = new SecureRoute('GET|POST', '/admin/recipes/add', '\Monoblock\Controllers\Admin\RecipesController', 'add');
         $endpoints[] = new SecureRoute('GET', '/admin/recipes/delete/@id', '\Monoblock\Controllers\Admin\RecipesController', 'delete');
+        $endpoints[] = new SecureRoute('GET|POST', '/admin/recipes/edit/@id', '\Monoblock\Controllers\Admin\RecipesController', 'edit');
 
         $this->router->setEndpoints($endpoints);
 

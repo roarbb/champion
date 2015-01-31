@@ -8,18 +8,19 @@ class RecipeRepository extends DocumentRepository
     {
         $recipe = new Recipe();
 
+        if (isset($recipeData['id']) && !empty($recipeData['id'])) {
+            $recipe->setRecipeId($recipeData['id']);
+        }
+
         $recipe->setName($recipeData['name']);
         $recipe->setCreatedAt(new \DateTime());
         $recipe->setDescription($recipeData['description']);
         $recipe->setInstructions($recipeData['instructions']);
         $recipe->setMealType($recipeData['mealType']);
+        $recipe->setTags($recipeData['tags']);
 
         if (!empty($recipeData['ingredients'])) {
             $this->addIngredients($recipe, $recipeData['ingredients']);
-        }
-
-        if (!empty($recipeData['tags'])) {
-            $this->addTags($recipe, $recipeData['tags']);
         }
 
         $this->getDocumentManager()->persist($recipe);
@@ -42,21 +43,14 @@ class RecipeRepository extends DocumentRepository
 
     private function addIngredients(Recipe $recipe, $ingredients)
     {
-        $nonEmptyIngredients = array_filter($ingredients, function($ingredient) {
+        $parsedIngredients = $this->parseIngredients($ingredients);
+
+        $nonEmptyIngredients = array_filter($parsedIngredients, function($ingredient) {
             return !empty($ingredient['name']) && !empty($ingredient['amount']);
         });
 
         foreach ($nonEmptyIngredients as $ingredient) {
-            $recipe->addIngredient(new Ingredient($ingredient['name'], $ingredient['unit'], $ingredient['amount']));
-        }
-    }
-
-    private function addTags(Recipe $recipe, $tags)
-    {
-        $tagsArray = explode(',', $tags);
-
-        foreach ($tagsArray as $tag) {
-            $recipe->addTag(new Tags(trim($tag)));
+            $recipe->addIngredient(new Ingredient($ingredient['name'], $ingredient['unit'], $ingredient['amount'], $ingredient['id']));
         }
     }
 
@@ -66,15 +60,28 @@ class RecipeRepository extends DocumentRepository
         $tags = $recipe->getTags();
         $ingredients = $recipe->getIngredients();
 
-        foreach ($tags as $tag) {
-            $this->createQueryBuilder()
-                ->remove('Monoblock\Documents\Tags')
-                ->field('_id')
-                ->equals($tag->getTagId())
-                ->getQuery()
-                ->execute();
+        $this->deleteTags($tags);
+        $this->deleteIngredients($ingredients);
+
+        $this->createQueryBuilder()->remove()
+            ->field('_id')->equals($recipeId)
+            ->getQuery()->execute();
+    }
+
+    private function parseIngredients($ingredients)
+    {
+        $out = array();
+
+        foreach ($ingredients as $ingredientLabel => $ingredientData) {
+            $dividedLabel = explode('_', $ingredientLabel);
+            $out[$dividedLabel[0]][$dividedLabel[1]] = $ingredientData;
         }
 
+        return $out;
+    }
+
+    private function deleteIngredients($ingredients)
+    {
         foreach ($ingredients as $ingredient) {
             $this->createQueryBuilder()
                 ->remove('Monoblock\Documents\Ingredient')
@@ -83,9 +90,17 @@ class RecipeRepository extends DocumentRepository
                 ->getQuery()
                 ->execute();
         }
+    }
 
-        $this->createQueryBuilder()->remove()
-            ->field('_id')->equals($recipeId)
-            ->getQuery()->execute();
+    private function deleteTags($tags)
+    {
+        foreach ($tags as $tag) {
+            $this->createQueryBuilder()
+                ->remove('Monoblock\Documents\Tag')
+                ->field('_id')
+                ->equals($tag->getTagId())
+                ->getQuery()
+                ->execute();
+        }
     }
 }

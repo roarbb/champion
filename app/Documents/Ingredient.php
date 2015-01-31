@@ -17,10 +17,14 @@ class Ingredient
     /** @ODM\Float */
     private $amount;
 
-    public function __construct($name, $unit, $amount)
+    public function __construct($name, $unit, $amount, $id = null)
     {
         if (empty($name) || empty($amount) || empty($unit)) {
             throw new \InvalidArgumentException('Name or amount or unit of Ingredient empty.');
+        }
+
+        if (!empty($id)) {
+            $this->setIngredientId($id);
         }
 
         $this->setName($name);
@@ -82,5 +86,13 @@ class Ingredient
     public function getIngredientId()
     {
         return $this->ingredientId;
+    }
+
+    /**
+     * @param mixed $ingredientId
+     */
+    public function setIngredientId($ingredientId)
+    {
+        $this->ingredientId = $ingredientId;
     }
 }

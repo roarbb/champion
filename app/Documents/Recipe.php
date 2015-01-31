@@ -16,11 +16,11 @@ class Recipe
     /** @ODM\Date */
     private $createdAt;
 
-    /** @ODM\EmbedMany(targetDocument="Ingredient") */
+    /** @ODM\EmbedMany(targetDocument="Ingredient", strategy="set") */
     private $ingredients = array();
 
-    /** @ODM\EmbedMany(targetDocument="Tags") */
-    private $tags = array();
+    /** @ODM\String */
+    private $tags;
 
     /**
      * Breakfast/Main/Snack/Dinner
@@ -126,14 +126,6 @@ class Recipe
     }
 
     /**
-     * @param mixed $tag
-     */
-    public function addTag($tag)
-    {
-        $this->tags[] = $tag;
-    }
-
-    /**
      * @return mixed
      */
     public function getInstructions()
@@ -163,5 +155,21 @@ class Recipe
     public function setServings($servings)
     {
         $this->servings = $servings;
+    }
+
+    /**
+     * @param mixed $recipeId
+     */
+    public function setRecipeId($recipeId)
+    {
+        $this->recipeId = $recipeId;
+    }
+
+    /**
+     * @param mixed $tags
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
     }
 }

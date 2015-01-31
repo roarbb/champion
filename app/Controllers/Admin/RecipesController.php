@@ -32,4 +32,13 @@ class RecipesController extends Controller
 
         $this->redirect('/admin/recipes/');
     }
+
+    public function edit($recipeId)
+    {
+        $this->setView('add');
+
+        $form = new RecipeEditForm();
+        $recipeRepository = $this->documentManager->getRepository('Monoblock\Documents\Recipe');
+        $this->render(array('form' => $form->getForm($recipeRepository, $recipeId)));
+    }
 }

@@ -56,39 +56,50 @@
     <br/>
     <h3 class="col-sm-offset-2">Ingredients</h3>
 
-    {for $i=0;$i<16;$i++}
-    <div class="form-group ingredient {if $i==0}first showing-ingredient{else}hided-ingredient{/if} ingredient-row-{$i}">
-        <div class="col-sm-2 control-label">
-            <label>Ingredient</label>
-        </div>
-        <div class="col-sm-3">
-            <input type="text" class="form-control" name="ingredients[{$i}][name]"/>
+    {var row = 1}
+    {foreach $form['ingredients']->components as $component}
+        {if strpos($component->name,'_name') !== false}
+        <div class="form-group ingredient {if $row==1}first showing-ingredient{else}hided-ingredient{/if} ingredient-row-{$row}">
+            <div class="col-sm-2 control-label">
+                {$component->label}
+            </div>
+            <div class="col-sm-3">
+                {$component->control}
+            </div>
+        {/if}
+
+        {if strpos($component->name,'_amount') !== false}
+            <div class="col-sm-1 control-label">
+                {$component->label}
+            </div>
+            <div class="col-sm-2">
+                {$component->control}
+            </div>
+        {/if}
+
+        {if strpos($component->name,'_unit') !== false}
+            <div class="col-sm-1 control-label">
+                {$component->label}
+            </div>
+            <div class="col-sm-2">
+                {$component->control}
+            </div>
+            <div class="col-sm-1">
+                <a class="btn btn-block btn-danger remove-ingredient" data-id="{$row}" {if $row==1}disabled="disabled"{/if}>
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>
+            </div>
         </div>
 
-        <div class="col-sm-1 control-label">
-            <label>Amount</label>
-        </div>
-        <div class="col-sm-2">
-            <input type="text" class="form-control" name="ingredients[{$i}][amount]"/>
-        </div>
+        {if strpos($component->name,'_id') !== false}
+            <div class="hidden">
+                {$component->control}
+            </div>
+        {/if}
 
-        <div class="col-sm-1 control-label">
-            <label>Unit</label>
-        </div>
-        <div class="col-sm-2">
-            <select name="ingredients[{$i}][unit]" class="form-control">
-                <option>kg</option>
-                <option>qty</option>
-                <option>l</option>
-            </select>
-        </div>
-        <div class="col-sm-1">
-            <a class="btn btn-block btn-danger remove-ingredient" data-id="{$i}" {if $i==0}disabled="disabled"{/if}>
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-            </a>
-        </div>
-    </div>
-    {/for}
+        {var row += 1}
+        {/if}
+    {/foreach}
 
     <div class="form-group">
         <div class="col-sm-offset-11 col-sm-1">
@@ -100,8 +111,8 @@
 
     <hr/>
 
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
+    <div class="form-group clearfix">
+        <div class="col-sm-offset-2 col-sm-10 text-right">
             {$form['submit']->control}
         </div>
     </div>
@@ -113,7 +124,13 @@
     <script src="{$basePath}/www/js/sweet-alert.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('.ingredient').hide();
+            $('.ingredient').each(function() {
+                if ($(this).find('input').first().val() == '') {
+                    $(this).hide().addClass('hided-ingredient').removeClass('showing-ingredient');
+                } else {
+                    $(this).removeClass('hided-ingredient').addClass('showing-ingredient');
+                }
+            })
             $('.first').show();
 
             $('.ingredient input').on('change', function() {

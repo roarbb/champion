@@ -35,6 +35,11 @@ class Controller
      */
     protected $documentManager;
 
+    /**
+     * @var string
+     */
+    private $forcedView;
+
     public function __construct(ServiceContainer $serviceContainer)
     {
         $this->serviceContainer = $serviceContainer;
@@ -90,6 +95,17 @@ class Controller
         $parsedController = explode('\\', $calledClass);
         $folder = ucfirst(str_replace('Controller', '', end($parsedController)));
 
-        return sprintf('%s/../Views/%s/%s.latte', __DIR__, $folder, $this->getAction());
+        $templateFileName = $this->getAction();
+
+        if ($this->forcedView) {
+            $templateFileName = $this->forcedView;
+        }
+
+        return sprintf('%s/../Views/%s/%s.latte', __DIR__, $folder, $templateFileName);
+    }
+
+    protected function setView($viewName)
+    {
+        $this->forcedView = $viewName;
     }
 }
