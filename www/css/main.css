@@ -1,7 +1,21 @@
+@import url(http://fonts.googleapis.com/css?family=Sigmar+One|Bangers);
+
 .navbar-static-top {
     margin-bottom: 19px;
 }
 
 .page-header {
     margin: 20px 0;
+}
+
+.header {
+    font-family: 'Sigmar One', cursive;
+}
+
+.header span {
+    font-family: 'Bangers', cursive;
+}
+
+.big-titles h2 {
+    font-size: 350%;
 }
