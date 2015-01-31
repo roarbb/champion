@@ -47,7 +47,7 @@ class UserListDatagrid
         /** @var User $user */
         foreach ($users as $user) {
             $row = array();
-            $row['id'] = $user->getId();
+            $row['id'] = $user->getUserId();
             $row['name'] = $user->getName();
             $row['email'] = $user->getEmail();
 

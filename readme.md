@@ -5,6 +5,9 @@ His only purpose is to find out how complex aplications can be written. With acc
 I will use some of my favourites libraries, as well libraries that I always wanted to play with. 
 
 ## Key features
+_version 1.4_
+* Recipes CRUD actions in Admin section
+
 _version 1.3_
 * Templating (redirecting, basic template variables, macros)
 
