@@ -18,6 +18,7 @@ class RecipeRepository extends DocumentRepository
         $recipe->setInstructions($recipeData['instructions']);
         $recipe->setMealType($recipeData['mealType']);
         $recipe->setTags($recipeData['tags']);
+        $recipe->setPublished($recipeData['published']);
 
         if (!empty($recipeData['ingredients'])) {
             $this->addIngredients($recipe, $recipeData['ingredients']);

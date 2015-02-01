@@ -37,6 +37,9 @@ class Recipe
     /** @ODM\Int */
     private $servings;
 
+    /** @ODM\Boolean */
+    private $published;
+
     /**
      * @return mixed
      */
@@ -171,5 +174,21 @@ class Recipe
     public function setTags($tags)
     {
         $this->tags = $tags;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPublished()
+    {
+        return $this->published;
+    }
+
+    /**
+     * @param bool $published
+     */
+    public function setPublished($published)
+    {
+        $this->published = $published;
     }
 }

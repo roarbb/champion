@@ -19,3 +19,7 @@
 .big-titles h2 {
     font-size: 350%;
 }
+
+.border {
+    border: 1px solid red;
+}

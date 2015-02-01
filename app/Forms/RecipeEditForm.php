@@ -51,6 +51,7 @@ class RecipeEditForm
             $ingredients->addHidden($i . '_id');
         }
 
+        $form->addCheckbox('published', 'Published');
         $form->addSubmit('submit', 'Create');
 
         if ($form->isSuccess()) {
@@ -83,6 +84,7 @@ class RecipeEditForm
         $form['mealType']->setDefaultValue($recipe->getMealType());
         $form['tags']->setDefaultValue($recipe->getTags());
         $form['instructions']->setDefaultValue($recipe->getInstructions());
+        $form['published']->setDefaultValue($recipe->getPublished());
 
         /**
          * @var int $ingredientNumber
