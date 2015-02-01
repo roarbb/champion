@@ -1,0 +1,17 @@
+{extends $layout}
+
+{block title}Generate your Weekly plan{/block}
+
+{block content}
+    <div class="row">
+        <h2>Your weekly plan:</h2>
+
+        {foreach $recipes as $day => $recipeData}
+            <h3>{date('l', strtotime("Sunday +{$day} days"))}</h3>
+            Breakfast: {$recipeData['breakfast']->getName()}
+            <br/>
+            Main: {$recipeData['main']->getName()}
+            <hr/>
+        {/foreach}
+    </div>
+{/block}

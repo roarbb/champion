@@ -25,12 +25,14 @@ class RecipeEditForm
         $form = new Form('recipe');
         $this->recipeId = $recipeId;
         $this->recipeRepository = $recipeRepository;
+        $submitLabel = 'Create';
 
         if ($this->recipeId) {
             /** @var Recipe $recipe */
             $recipe = $this->recipeRepository->find($this->recipeId);
 
             $form->addHidden('id', $recipe->getRecipeId());
+            $submitLabel = 'Save';
         }
 
         $units = array('kg', 'ml', 'qty', 'tea spoon');
@@ -52,7 +54,9 @@ class RecipeEditForm
         }
 
         $form->addCheckbox('published', 'Published');
-        $form->addSubmit('submit', 'Create');
+
+
+        $form->addSubmit('submit', $submitLabel);
 
         if ($form->isSuccess()) {
             $this->createRecipe($form);

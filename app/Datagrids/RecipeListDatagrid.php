@@ -29,7 +29,7 @@ class RecipeListDatagrid
         $datagrid->setTableClass('table');
         $datagrid->hideColumns(array('id'));
 
-        $datagrid->addHeader(array('Id', 'Name', 'Meal Type'));
+        $datagrid->addHeader(array('Id', 'Name', 'Meal Type', 'Published'));
 
         $datagrid->addAction('Edit', $apiUri . '/admin/recipes/edit/{id}');
         $datagrid->addAction('Delete', $apiUri . '/admin/recipes/delete/{id}');
@@ -62,6 +62,7 @@ class RecipeListDatagrid
             $row['id'] = $recipe->getRecipeId();
             $row['name'] = $recipe->getName();
             $row['mealType'] = $recipe->getMealType();
+            $row['published'] = intval($recipe->getPublished());
 
             $out[] = $row;
         }

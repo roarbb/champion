@@ -1,5 +1,6 @@
 <?php namespace Monoblock\Documents;
 
+use Doctrine\ODM\MongoDB\Cursor;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 
 class RecipeRepository extends DocumentRepository
@@ -103,5 +104,48 @@ class RecipeRepository extends DocumentRepository
                 ->getQuery()
                 ->execute();
         }
+    }
+
+    public function getRandomRecipes($days)
+    {
+        $out = array();
+
+        for ($i=0; $i<$days; $i++) {
+            /** @var Recipe $breakfast */
+            $breakfast = $this->getRandomMeal('breakfast');
+
+            /** @var Recipe $main */
+            $main = $this->getRandomMeal('main');
+
+            $out[$i+1]['breakfast'] = $breakfast;
+            $out[$i+1]['main'] = $main;
+        }
+
+        return $out;
+    }
+
+    private function getRandomMeal($mealType)
+    {
+        $recipesCount = $this->getMealTypeRecipesCount($mealType);
+        $randomNumber = rand(0, $recipesCount - 1);
+
+        /** @var Cursor $randomRecipe */
+        $randomRecipe = $this->createQueryBuilder()
+            ->limit(1)
+            ->field('mealType')->equals($mealType)
+            ->skip($randomNumber)
+            ->getQuery()
+            ->execute();
+
+        return $randomRecipe->getSingleResult();
+    }
+
+    private function getMealTypeRecipesCount($mealType)
+    {
+        return $this->createQueryBuilder()
+            ->field('mealType')->equals($mealType)
+            ->getQuery()
+            ->execute()
+            ->count();
     }
 }
