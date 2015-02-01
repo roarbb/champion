@@ -86,7 +86,15 @@ class Url
     private function calculateBasePath($server, array $parsedUri)
     {
         $scriptNameWithoutFilename = $this->cleanScriptName($server['SCRIPT_NAME']);
-        $basePath = str_replace($scriptNameWithoutFilename, '', $parsedUri['path']);
+
+        $basePath = $parsedUri['path'];
+        if($scriptNameWithoutFilename !== '/') {
+            $basePath = str_replace($scriptNameWithoutFilename, '', $parsedUri['path']);
+        }
+
+        if (empty($basePath)) {
+            return '/';
+        }
 
         if($basePath === '/') {
             return $basePath;
